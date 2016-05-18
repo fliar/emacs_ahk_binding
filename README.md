@@ -15,7 +15,7 @@ Add your emacs target to IsTarget
 |c-n         | down     |
 |c-p         | up       |
 |c-g         | Esc      |
-|m-@         | Mark toggle  |
+|c-@         | Mark toggle  |
 |c-a| Home Home  |
 |m-m| End Home  |
 |c-e| End  |
@@ -24,3 +24,9 @@ Add your emacs target to IsTarget
 |c-y| ctrl-v  |
 |c-k| shift-End ctrl-x  |
 |m-g m-g| ctrl-g  |
+|m-f| Ctrl-right|
+|m-b| Ctrl-left|
+|m-<| Ctrl-Home|
+|m->| Ctrl-End|
+|c-v| Page Up|
+|m-v| Page Down|

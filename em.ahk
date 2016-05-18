@@ -69,12 +69,45 @@ SendKeyByEmacsMode(emacsKey, b)
 }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; emacs keys
+
 emacs_c_x() ; c-x,and show status on tray tip
 {
 	global c_x
 	c_x := !c_x
 	state := c_x ? "On" : "Off"
 	TrayTip, Emacs Mode, c-x is %state%, 3, 1
+}
+
+emacs_file_begin()
+{
+	global mark
+	if mark
+	{
+		Send +^{Home}
+		return
+	}
+	Send ^{Home}
+}
+
+emacs_file_end()
+{
+	global mark
+	if mark
+	{
+		Send +^{End}
+		return
+	}
+	Send ^{End}
+}
+
+emacs_word_left()
+{
+	global mark
+	if mark {
+		Send +^{Left}
+		return
+	}
+	Send ^{Left}
 }
 
 emacs_left() ; move left
@@ -84,6 +117,16 @@ emacs_left() ; move left
 		Send +{Left}
 	else
 		Send {Left}
+}
+
+emacs_word_right()
+{
+	global mark
+	if mark {
+		Send +^{Right}
+		return
+	}
+	Send ^{Right}
 }
 
 emacs_right() ; move right
@@ -193,6 +236,12 @@ emacs_m_at() ; meta-shift-2, show mark mode on tray tip
 	mark := !mark
 	state := mark ? "On" : "Off"
 	TrayTip, Emacs Mode, Mark Mode is %state%, 3, 1
+	if !mark
+	{
+		Send {Esc}
+		return
+	}
+	Send ^{@} ; to disable ime
 }
 
 emacs_line_begin() ; move to line begin
@@ -265,6 +314,28 @@ emacs_m_g() ; m-g
 	}
 	m_g := !m_g
 }
+
+emacs_page_up()
+{
+	global mark
+	if mark
+	{
+		Send +{PgUp}
+		return
+	}
+	Send {PgUp}
+}
+
+emacs_page_down()
+{
+	global mark
+	if mark
+	{
+		Send +{PgDn}
+		return
+	}
+	Send {PgDn}
+}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; keys map
 ^x:: SendKeyByEmacsMode("emacs_c_x", false)
@@ -273,7 +344,7 @@ emacs_m_g() ; m-g
 ^n:: SendKeyByEmacsMode("emacs_c_n", true)
 ^p:: SendKeyByEmacsMode("emacs_c_p", true)
 ^g:: SendKeyByEmacsMode("emacs_c_g", true)
-!@:: SendKeyByEmacsMode("emacs_m_at", true)
+^+2:: SendKeyByEmacsMode("emacs_m_at", true)
 ^a:: SendKeyByEmacsMode("emacs_line_begin", true)
 !m:: SendKeyByEmacsMode("emacs_line_text_begin", true)
 ^e:: SendKeyByEmacsMode("emacs_line_end", true)
@@ -285,3 +356,9 @@ emacs_m_g() ; m-g
 k:: SendKeyByEmacsMode("emacs_k", true)
 u:: SendKeyByEmacsMode("emacs_u", true)
 !g:: SendKeyByEmacsMode("emacs_m_g", true)
+!f:: SendKeyByEmacsMode("emacs_word_right", true)
+!b:: SendKeyByEmacsMode("emacs_word_left", true)
+!>:: SendKeyByEmacsMode("emacs_file_end", true)
+!<:: SendKeyByEmacsMode("emacs_file_begin", true)
+^v:: SendKeyByEmacsMode("emacs_page_down", true)
+!v:: SendKeyByEmacsMode("emacs_page_up", true)
